@@ -3,7 +3,7 @@
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout>
-                <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level   %25c{3}  - %msg%n</Pattern>
+                <Pattern>%d{HH:mm:ss.SSS} %-5level   %25c{3}  - %msg%n</Pattern>
             </PatternLayout>
         </Console>
     </Appenders>
@@ -11,7 +11,10 @@
         <Logger name="com.gut" level="debug" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
-        <Root level="info">
+        <Logger name="org.apache.logging" level="warn" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Root level="warn">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
