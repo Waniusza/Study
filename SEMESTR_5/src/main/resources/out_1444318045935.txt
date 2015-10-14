@@ -1,0 +1,9 @@
+Test FALSE = false
+Test TRUE = true
+Test false = false
+Test true = true
+Test FALSE = false
+Test TRUE = true
+Test false = false
+Test true = true
+false

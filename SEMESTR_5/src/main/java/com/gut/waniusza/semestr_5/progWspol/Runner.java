@@ -7,6 +7,7 @@ package com.gut.waniusza.semestr_5.progWspol;
 
 import com.gut.waniusza.semestr_5.progWspol.lesson_1.Ex1;
 import com.gut.waniusza.semestr_5.progWspol.lesson_1.SomeThread;
+import com.gut.waniusza.semestr_5.progWspol.lesson_2.Banking;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,9 +27,12 @@ public class Runner {
         log.debug(" init ");
         Ex1 ex1 = new Ex1();
         SomeThread someThread = new SomeThread();
+        Banking banking = new Banking();
         // Lesson 1
-        ex1.run();
-        someThread.run();
+//        ex1.run();
+//        someThread.run();
+        // Lesson 2
+        banking.run();
     }
     
 }
