@@ -21,10 +21,8 @@ public class FireAlgorithm extends Applet {
     int szer = 300;
     Graphics mapa;
 
-    int[][] scrRed = new int[wys][szer];
-    int[][] scrGreen = new int[wys][szer];
-    int[] redPal = new int[szer];
-    int[] greenPal = new int[szer];
+    int scr[][] = new int[wys][szer];
+    int pal[] = new int[szer];
 
     @Override
     public void paint(Graphics g) {
@@ -37,79 +35,53 @@ public class FireAlgorithm extends Applet {
     }
 
     void genPalet() {
+        pal[0] = 0;
         for (int i = 1; i < szer; i++) {
-            redPal[i] = 184 + (int) (Math.sin(Math.random()) * 64);
-            greenPal[i] +=  20 + (int) (Math.sin(Math.random()) * 16);
+            pal[i] = 150 + (int) (Math.random() * 106);
         }
     }
 
     void paleta() {
-        for (int i = 1; i < szer; i++) {
-            redPal[i] = 128 + (int) (Math.random() * 128);
-            greenPal[i] = 20 + (int) (Math.random() * 128);
+        for (int i = 0; i < 200; i++) {
+            for (int j = 0; j < 300; j++) {
+                scr[i][j] = 0;
+            }
         }
-//       
-//        for (int i = 1; i < 128; i++) {
-//            redPal[i] = (2 * i << 16) | (i << 8) | (2);
-//        }
-//        for (int i = 0; i < 64; i++) {
-//            redPal[i + 128] = (254 << 16) | (i + 127 << 8) | (i + 2);
-//        }
-//        for (int i = 0; i < 66; i++) {
-//            redPal[i + 190] = (254) | (i + 190 << 8) | (i + 65);
-//        }
-//        redPal[0] = 0;
-//        redPal[1] = 0;
-//        redPal[255] = (255 << 16) | (255 << 8) | (132);
+        genPalet();
     }
 
-    void piksel(int x, int y, int red, int green) {
-        if (red > 0 && green > 0 && red < 255 & green < 255) {
-            mapa.setColor(new Color(red, green, 0));
-            scrRed[y][x] = red;
-            scrGreen[y][x] = green;
-        } else if (red <= 0 && green > 0) {
-            mapa.setColor(new Color(0, green, 0));
-            scrRed[y][x] = 0;
-            scrGreen[y][x] = green;
-        } else if (red > 0 && green <= 0) {
-            mapa.setColor(new Color(red, 0, 0));
-            scrRed[y][x] = red;
-            scrGreen[y][x] = 0;
-        } else if (red <= 0 && green <= 0) {
-            mapa.setColor(new Color(0, 0, 0));
-            scrRed[y][x] = 0;
-            scrGreen[y][x] = 0;
+    void piksel(int x, int y, int kolor) {
+        if (x > 0 && x < 300 && y > 0 && y < 200) {
+            if (kolor > 0 && kolor < 255) {
+                mapa.setColor(new Color(kolor, 0, 0));
+            } else if (kolor <= 0) {
+                mapa.setColor(new Color(0, 0, 0));
+            } else {
+                mapa.setColor(new Color(255, 0, 0));
+            }
+            mapa.drawRect(x, y, 1, 1);
+            scr[y][x] = kolor;
         }
-        mapa.drawRect(x, y, 1, 1);
     }
 
     void fire_g() {
+        int tmp;
         genPalet();
+        for (int x = 1; x < szer; x++) {
+            piksel(x, 199, pal[x]); /**/
 
-        int tmpRed[] = new int[szer];
-        int tmpGreen[] = new int[szer];
-        for (int x = 10; x < szer - 10; x++) {
-            piksel(x, 198, redPal[x + 5], greenPal[x + 5]); /**/
-
-            piksel(x, 199, redPal[x], greenPal[x]); /**/
+            piksel(x, 200, pal[x]); /**/
 
         }
-        for (int y = wys - 3; y > 1; y--) {
-            for (int x = 6; x < szer - 7; x++) {
-                int lowwerRed[] = scrRed[y + 1];
-                int dlowwerRed[] = scrRed[y + 2];
-                int lowwerGreen[] = scrGreen[y + 1];
-                int dlowwerGreen[] = scrRed[y + 2];
-
-                tmpRed[x] = (lowwerRed[x] * 20 + lowwerRed[x + 1] * 7 + lowwerRed[x - 1] * 7) + (dlowwerRed[x] * 14 + dlowwerRed[x + 1] * 6 + dlowwerRed[x - 1] * 6);
-                tmpRed[x] /= 60;
-
-                tmpGreen[x] = (lowwerGreen[x] * 20 + lowwerGreen[x + 1] * 7 + lowwerGreen[x - 1] * 7) + (dlowwerGreen[x] * 14 + dlowwerGreen[x + 1] * 6 + dlowwerGreen[x - 1] * 6);
-                tmpGreen[x] /= 60;
-            }
+        for (int y = wys - 3; y > 0; y--) {
             for (int x = 1; x < szer - 2; x++) {
-                piksel(x, y, tmpRed[x], tmpGreen[x]);
+                int lowwer[] = scr[y + 1];
+                int dlowwer[] = scr[y + 2];
+
+                tmp = (lowwer[x] * 20 + lowwer[x + 1] * 7 + lowwer[x - 1] * 7);
+                tmp += (dlowwer[x] * 14 + dlowwer[x + 1] * 6 + dlowwer[x - 1] * 6);
+                tmp /= 60;
+                piksel(x, y, tmp);
             }
 
         }
