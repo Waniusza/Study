@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.gut.waniusza.semestr_5.fizykaTechniczna.lab;
 
 import java.applet.Applet;
@@ -11,7 +6,6 @@ import java.awt.Graphics;
 
 /**
  *
- * 
  * http://lo28.internetdsl.pl/kolor/ogien.htm
  * @author janusz
  */
