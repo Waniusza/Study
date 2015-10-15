@@ -37,7 +37,8 @@ public class FireAlgorithm extends Applet {
     void genPalet() {
         pal[0] = 0;
         for (int i = 1; i < szer; i++) {
-            pal[i] = 150 + (int) (Math.random() * 106);
+            pal[i] = (int) (Math.random() * 256);
+            
         }
     }
 
@@ -53,27 +54,28 @@ public class FireAlgorithm extends Applet {
     void piksel(int x, int y, int kolor) {
         if (x > 0 && x < 300 && y > 0 && y < 200) {
             if (kolor > 0 && kolor < 255) {
-                mapa.setColor(new Color(kolor, 0, 0));
+            scr[y][x] = kolor;
+                mapa.setColor(new Color(255, 255-kolor, 0));
             } else if (kolor <= 0) {
+            scr[y][x] = 0;
                 mapa.setColor(new Color(0, 0, 0));
             } else {
-                mapa.setColor(new Color(255, 0, 0));
+            scr[y][x] = 0;
+                mapa.setColor(new Color(0, 0, 0));
             }
             mapa.drawRect(x, y, 1, 1);
             scr[y][x] = kolor;
-        }
-    }
+        }  }
 
     void fire_g() {
         int tmp;
         genPalet();
-        for (int x = 1; x < szer; x++) {
+        for (int x = 10; x < szer-10; x++) {
             piksel(x, 199, pal[x]); /**/
-
-            piksel(x, 200, pal[x]); /**/
+            piksel(x, 198, pal[x]); /**/
 
         }
-        for (int y = wys - 3; y > 0; y--) {
+        for (int y = 0; y <= wys - 3; y++) {
             for (int x = 1; x < szer - 2; x++) {
                 int lowwer[] = scr[y + 1];
                 int dlowwer[] = scr[y + 2];
@@ -81,7 +83,8 @@ public class FireAlgorithm extends Applet {
                 tmp = (lowwer[x] * 20 + lowwer[x + 1] * 7 + lowwer[x - 1] * 7);
                 tmp += (dlowwer[x] * 14 + dlowwer[x + 1] * 6 + dlowwer[x - 1] * 6);
                 tmp /= 60;
-                piksel(x, y, tmp);
+                piksel(x, y, tmp-13);
+//                System.out.println("tmp -> " + tmp);
             }
 
         }
