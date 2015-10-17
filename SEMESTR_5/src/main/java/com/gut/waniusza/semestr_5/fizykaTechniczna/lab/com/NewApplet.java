@@ -6,13 +6,14 @@
 package com;
 
 import java.applet.Applet;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
+ * 
+ * http://lo28.internetdsl.pl/kolor/ogien.html
  * @author janusz
  */
 public class NewApplet extends Applet {
@@ -29,7 +30,11 @@ public class NewApplet extends Applet {
     @Override
     public void paint(Graphics g) {
         mapa = g;
-        fire_g();
+        try {
+            fire_g(null);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(NewApplet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void init() {
@@ -44,48 +49,39 @@ public class NewApplet extends Applet {
         }
     }
 
-    void piksel(int x, int y, int kolor) {
-        if (x > 0 && x < 300 && y > 0 && y < 200) {
-            if (kolor > 0 && kolor < 255) {
-                scr[y][x] = kolor;
-                mapa.setColor(new Color(255, 255 - kolor, 0));
-            } else if (kolor <= 0) {
-                scr[y][x] = 0;
-                mapa.setColor(new Color(0, 0, 0));
-            } else {
-                scr[y][x] = 0;
-                mapa.setColor(new Color(0, 0, 0));
-            }
-            mapa.drawRect(x, y, 1, 1);
-        }
-    }
-
-    void fire_g() {
+    void fire_g(Thread thread) throws InterruptedException {
         int tmp;
         Calculator c1 = new Calculator(szer);
         Calculator c2 = new Calculator(szer);
+        System.out.println("C1 start");
         c1.start();
+        System.out.println("C2 start");
         c2.start();
 
-        try {
-            c1.join();
-            c2.join();
-            scr[wys-1] = pal1 = c1.getRes();
-            scr[wys-2] = pal2 = c2.getRes();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(NewApplet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
+        System.out.println("C1 join");
+        c1.join();
+        scr[wys - 1] = c1.getRes();
+        System.out.println("C2 join");
+        c2.join();
+        scr[wys - 2] = c2.getRes();
+
         Calculator2 cz1 = new Calculator2(szer, wys, scr);
-        
+        System.out.println("Cz1 start");
         cz1.start();
-        try {
-            cz1.join();
-            scr = cz1.getScr();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(NewApplet.class.getName()).log(Level.SEVERE, null, ex);
+        System.out.println("Cz1 join");
+        cz1.join();
+        scr = cz1.getScr();
+
+        Drawer drawer = new Drawer(mapa, scr, szer, wys);
+        if (thread != null) {
+            System.out.println("drawer join");
+            thread.join();
         }
+        System.out.println("drawer start");
+        drawer.start();
+
+        fire_g(drawer);
+
     }
 
 }

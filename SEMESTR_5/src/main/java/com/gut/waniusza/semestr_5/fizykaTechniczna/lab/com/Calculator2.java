@@ -9,7 +9,7 @@ package com;
  *
  * @author janusz
  */
-public class Calculator2 extends Thread{
+public class Calculator2 extends Thread {
 
     static int szer;
     static int wys;
@@ -21,17 +21,20 @@ public class Calculator2 extends Thread{
         this.wys = wys;
         scr = old;
     }
-    
+
     static void calc() {
         for (int y = 0; y <= wys - 3; y++) {
+            int current[] = scr[y];
             int lowwer[] = scr[y + 1];
             int dlowwer[] = scr[y + 2];
 
-            for (int x = 1; x < szer - 2; x++) {
+            for (int x = 2; x < szer - 3; x++) {
                 int tmp;
-                tmp = (lowwer[x] * 20 + lowwer[x + 1] * 7 + lowwer[x - 1] * 7);
-                tmp += (dlowwer[x] * 14 + dlowwer[x + 1] * 6 + dlowwer[x - 1] * 6);
-                tmp /= 60;
+                double wspl = 1 - Math.abs(x - (double) (szer) / 2) / (szer / 2);
+                /*20*/ tmp = (int) current[x - 1] * 10 + current[x + 1] * 10;
+                /*30*/ tmp += (int) (lowwer[x - 1] * 15 * (1 - wspl) + lowwer[x] * 30 * wspl + lowwer[x + 1] * 15 * (1 - wspl));
+                /*76*/tmp += (dlowwer[x - 2] * 30 * (1 - wspl) + dlowwer[x - 1] * 8 + dlowwer[x] * 60 * wspl + dlowwer[x + 1] * 8 + dlowwer[x + 2] * 30 * (1 - wspl));
+                tmp /= 126;
                 scr[y][x] = tmp;
             }
         }
@@ -40,8 +43,7 @@ public class Calculator2 extends Thread{
     public static int[][] getScr() {
         return scr;
     }
-    
-    
+
     @Override
     public void run() {
         calc();

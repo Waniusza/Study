@@ -16,19 +16,20 @@ public class Calculator extends Thread {
 
     public Calculator(int szer) {
         this.szer = szer;
-        this.res  = new int[szer];
+        this.res = new int[szer];
     }
 
     static void genPalet() {
-        for (int i = 1; i < szer; i++) {
-            res[i] = (int) (Math.random() * 256);
+        for (int i = 10; i < szer - 10; i++) {
+            double wsp = 1 - Math.abs(i - (double)(szer/2))/(szer/2);
+            res[i] = (int) (Math.random() * 126 + 126 * wsp);
         }
     }
 
     public static int[] getRes() {
         return res;
     }
-    
+
     @Override
     public void run() {
         genPalet();
