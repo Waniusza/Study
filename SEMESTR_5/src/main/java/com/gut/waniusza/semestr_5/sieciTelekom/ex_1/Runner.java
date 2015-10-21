@@ -5,7 +5,6 @@
  */
 package com.gut.waniusza.semestr_5.sieciTelekom.ex_1;
 
-import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.Pair;
 import com.gut.waniusza.semestr_5.sieciTelekom.helper.FileHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 public class Runner {
 
     private static final Logger log = LogManager.getLogger(Runner.class);
+    
     public static String DATA_SRC = "data.txt";
 
     /**
@@ -26,22 +26,26 @@ public class Runner {
      */
     public static void main(String[] args) {
         log.debug(" init ");
-        run();
+        runPairBit();
+        
 
-        Test test = new Test();
+        PairTest pairTest = new PairTest();
 
         for (int i = 0; i < 100; i++) {
-            if (test.runTest()) {
-                log.debug("Message is OK");
-            } else {
-                log.debug("Message is WRONG");
-            }
+            pairTest.runTest();
         }
+        
+        runModuloBit();
+        ModuloTest moduloTest = new ModuloTest();
+        
+        for (int i = 0; i < 100; i++) {
+            moduloTest.runTest();
+        }
+        
     }
 
-    public static Boolean run() {
-        Pair obj = new Pair();
-        boolean isPair = Boolean.TRUE;
+   private static void runPairBit() {
+        boolean isPair;
 
         // Get data from File
         byte[] biteData = FileHelper.getFileWithUtil(DATA_SRC);
@@ -51,9 +55,22 @@ public class Runner {
 
         // Save result into new file
         log.debug("SUMMARRY  " + (isPair ? " is pair" : " is not pair"));
-        FileHelper.saveResult(isPair);
+        FileHelper.saveResult(isPair, "bitPair");
+    }
+    
+    
+    private static void runModuloBit() {
+        int modulo;
 
-        return isPair;
+        // Get data from File
+        byte[] biteData = FileHelper.getFileWithUtil(DATA_SRC);
+
+        // Count modulo from data
+        modulo = Modulo.countModuloForData(biteData);
+
+        // Save result into new file
+        log.debug("MODULO " + modulo);
+        FileHelper.saveResult(modulo, "modulo");
     }
 }
 

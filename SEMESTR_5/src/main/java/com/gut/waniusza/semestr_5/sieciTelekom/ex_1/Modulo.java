@@ -3,27 +3,28 @@ package com.gut.waniusza.semestr_5.sieciTelekom.ex_1;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Pair {
+public class Modulo {
 
-    private static final Logger log = LogManager.getLogger(Pair.class);
+    private static final Logger log = LogManager.getLogger(Modulo.class);
 
 
-    public static boolean countPairForData(byte[] biteData) {
-        boolean isPair = true;
+    public static int countModuloForData(byte[] biteData) {
+        
+        int moduloResult = 0;
         for (int i = 0; i < biteData.length; i++) {
             String binaryString = Integer.toBinaryString(biteData[i]);
-            isPair = Boolean.logicalXor(isPair, countPairForBit(binaryString));
+            moduloResult = (moduloResult + countPairForBit(binaryString)) % Config.MODULO_MAX;
         }
-        return isPair;
+        return moduloResult;
     }
     
-    private static boolean countPairForBit(String binaryString) {
+    private static int countPairForBit(String binaryString) {
         int result = 0;
         byte[] bytes = binaryString.getBytes();
         for (int j = 0; j < bytes.length; j++) {
             result += bytes[j] - 48;
         }
-        return result % 2 == 0;
+        return result;
     }
 
 }

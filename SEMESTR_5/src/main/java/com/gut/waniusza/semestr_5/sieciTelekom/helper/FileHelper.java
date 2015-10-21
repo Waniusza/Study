@@ -5,7 +5,6 @@
  */
 package com.gut.waniusza.semestr_5.sieciTelekom.helper;
 
-import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.Pair;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -38,11 +37,11 @@ public class FileHelper {
         return result;
     }
 
-    public static void saveResult(Boolean result) {
+    public static void saveResult(Object data, String name) {
         try {
-            FileWriter fstream = new FileWriter(resources + "ex_1out/out_" + System.currentTimeMillis() + ".txt");
+            FileWriter fstream = new FileWriter(resources + "ex_1out/out_" + name + "_" + System.currentTimeMillis() + ".txt");
             BufferedWriter out = new BufferedWriter(fstream);
-            out.write(result.toString());
+            out.write(data.toString());
             out.close();
             log.debug("Zapis pliku zakończony powodzeniem");
         } catch (Exception ex) {
