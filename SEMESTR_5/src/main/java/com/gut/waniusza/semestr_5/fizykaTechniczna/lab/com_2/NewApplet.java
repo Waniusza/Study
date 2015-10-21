@@ -1,11 +1,11 @@
-package com2;
+package com.gut.waniusza.semestr_5.fizykaTechniczna.lab.com_2;
 
-import com2.calcs.BrownCalc;
-import com2.calcs.FloorCalc;
-import com2.calcs.IntencityCalc;
-import com2.calcs.RealInteancityCalc;
-import com2.struct.Config;
-import com2.struct.Piksel;
+import com.gut.waniusza.semestr_5.fizykaTechniczna.lab.com_2.calcs.BrownCalc;
+import com.gut.waniusza.semestr_5.fizykaTechniczna.lab.com_2.calcs.FloorCalc;
+import com.gut.waniusza.semestr_5.fizykaTechniczna.lab.com_2.calcs.IntencityCalc;
+import com.gut.waniusza.semestr_5.fizykaTechniczna.lab.com_2.calcs.RealInteancityCalc;
+import com.gut.waniusza.semestr_5.fizykaTechniczna.lab.com_2.struct.Config;
+import com.gut.waniusza.semestr_5.fizykaTechniczna.lab.com_2.struct.Piksel;
 import java.applet.Applet;
 import java.awt.Graphics;
 import java.util.logging.Level;

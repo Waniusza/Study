@@ -1,6 +1,6 @@
-package com2;
+package com.gut.waniusza.semestr_5.fizykaTechniczna.lab.com_2;
 
-import com2.struct.Config;
+import com.gut.waniusza.semestr_5.fizykaTechniczna.lab.com_2.struct.Config;
 import java.awt.Color;
 import java.awt.Graphics;
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com2.struct;
+package com.gut.waniusza.semestr_5.fizykaTechniczna.lab.com_2.struct;
 
 /**
  *

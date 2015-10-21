@@ -1,7 +1,7 @@
-package com2.calcs;
+package com.gut.waniusza.semestr_5.fizykaTechniczna.lab.com_2.calcs;
 
-import com2.struct.Config;
-import com2.struct.Piksel;
+import com.gut.waniusza.semestr_5.fizykaTechniczna.lab.com_2.struct.Config;
+import com.gut.waniusza.semestr_5.fizykaTechniczna.lab.com_2.struct.Piksel;
 
 /**
  *
