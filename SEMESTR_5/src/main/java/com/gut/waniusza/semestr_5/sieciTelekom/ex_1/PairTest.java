@@ -7,14 +7,15 @@ import org.apache.logging.log4j.Logger;
 public class PairTest {
 
     private static final Logger log = LogManager.getLogger(PairTest.class);
-    private static double chanceToWrong = 0.01;
     static final byte[] biteData = FileHelper.getFileWithUtil(Runner.DATA_SRC);
     static final Boolean correctResult = Pair.countPairForData(biteData);
-
+    private int fails;
+    
     public void runTest() {
         byte[] forcedData = forceWrongs();
         boolean isResultCorrect = correctResult.equals(Pair.countPairForData(forcedData));
-        log.debug(" message is " + (isResultCorrect ? " OK " : " WRONG"));
+        log.debug("=========== wprowadzono zakłóceń: " + fails);
+        log.debug("=========== metoda sądzi że wynik jest " + (isResultCorrect ? " OK " : " WRONG"));
     }
 
     private byte[] forceWrongs() {
@@ -23,6 +24,7 @@ public class PairTest {
             double rand = Math.random();
 //            log.debug(chance + " :: " + rand);
             if (rand < Config.CNANCE_TO_WRONG) {
+                fails++;
                 result[i] = (byte) ((biteData[i] + 1) % 2);
             }
         }

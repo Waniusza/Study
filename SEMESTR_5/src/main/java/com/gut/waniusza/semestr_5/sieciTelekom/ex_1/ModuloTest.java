@@ -9,12 +9,14 @@ public class ModuloTest {
     private static final Logger log = LogManager.getLogger(ModuloTest.class);
     static final byte[] biteData = FileHelper.getFileWithUtil(Runner.DATA_SRC);
     static final int correctResult = Modulo.countModuloForData(biteData);
+    private int fails = 0;
 
     public void runTest() {
         byte[] forcedData = forceWrongs();
         int forcedResult = Modulo.countModuloForData(forcedData);
         boolean isResultCorrect = correctResult == forcedResult;
-        log.debug(" message is " + (isResultCorrect ? " OK " : " WRONG"));
+        log.debug("=========== wprowadzono zakłóceń: " + fails);
+        log.debug("=========== metoda sądzi że wynik jest " + (isResultCorrect ? " OK " : " WRONG"));
     }
 
     private byte[] forceWrongs() {
@@ -23,6 +25,7 @@ public class ModuloTest {
             double rand = Math.random();
 //            log.debug(chance + " :: " + rand);
             if (rand < Config.CNANCE_TO_WRONG) {
+                fails++;
                 result[i] = (byte) ((biteData[i] + 1) % 2);
             }
         }
