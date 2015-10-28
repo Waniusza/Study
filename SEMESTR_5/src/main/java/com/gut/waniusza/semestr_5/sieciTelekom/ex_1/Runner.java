@@ -87,7 +87,7 @@ public class Runner {
     }
     
       private static void runCRC() {
-        int crc;
+        String crc;
         // Get data from File
         byte[] biteData = FileHelper.getFileWithUtil(DATA_SRC);
         // Count modulo from data
