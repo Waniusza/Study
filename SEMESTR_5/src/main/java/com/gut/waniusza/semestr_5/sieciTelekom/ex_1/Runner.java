@@ -19,10 +19,12 @@ public class Runner {
     private static final Logger log = LogManager.getLogger(Runner.class);
 
     public static String DATA_SRC = "data.txt";
-    public static final Boolean RUN_PAIR = true;
-    public static final Boolean TEST_PAIR = true;
+    public static final Boolean RUN_PAIR = false;
+    public static final Boolean TEST_PAIR = false;
     public static final Boolean RUN_MODULO = false;
     public static final Boolean TEST_MODULE = false;
+    public static final Boolean RUN_CRC = true;
+    public static final Boolean TEST_CRC = false;
 
     /**
      *
@@ -32,6 +34,12 @@ public class Runner {
         log.debug(" init ");
         if (RUN_PAIR) {
             runPairBit();
+        } 
+        if (RUN_MODULO) {
+            runModuloBit();
+        }
+        if (RUN_CRC) {
+            runCRC();
         }
         if (TEST_PAIR) {
             for (int i = 0; i < 100; i++) {
@@ -39,13 +47,16 @@ public class Runner {
                 pairTest.runTest();
             }
         }
-        if (RUN_MODULO) {
-            runModuloBit();
-        }
         if (TEST_MODULE) {
             for (int i = 0; i < 100; i++) {
                 ModuloTest moduloTest = new ModuloTest();
                 moduloTest.runTest();
+            }
+        }
+        if (TEST_CRC) {
+            for (int i = 0; i < 100; i++) {
+                CRCTest crcTest = new CRCTest();
+                crcTest.runTest();
             }
         }
 
@@ -53,7 +64,6 @@ public class Runner {
 
     private static void runPairBit() {
         boolean isPair;
-
         // Get data from File
         byte[] biteData = FileHelper.getFileWithUtil(DATA_SRC);
         // Count ones from data
@@ -66,7 +76,6 @@ public class Runner {
 
     private static void runModuloBit() {
         int modulo;
-
         // Get data from File
         byte[] biteData = FileHelper.getFileWithUtil(DATA_SRC);
         // Count modulo from data
@@ -75,6 +84,18 @@ public class Runner {
         // Save result into new file
         log.debug("MODULO " + modulo);
         FileHelper.saveResult(modulo, "modulo");
+    }
+    
+      private static void runCRC() {
+        int crc;
+        // Get data from File
+        byte[] biteData = FileHelper.getFileWithUtil(DATA_SRC);
+        // Count modulo from data
+        log.debug("=========== Pobrano plik o długości : " + biteData.length);
+        crc = CRC.countCRCForData(biteData);
+        // Save result into new file
+        log.debug("CRC " + crc);
+        FileHelper.saveResult(crc, "crc");
     }
 }
 
