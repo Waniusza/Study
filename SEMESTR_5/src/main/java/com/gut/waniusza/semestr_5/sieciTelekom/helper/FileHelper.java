@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class FileHelper {
 
-    private static final String resources = "src/main/resources/";
+    private static final String RESOURCES = "src/main/resources/";
     private static final Logger log = LogManager.getLogger(FileHelper.class);
 
     public static byte[] getFileWithUtil(String fileName) {
@@ -39,11 +39,14 @@ public class FileHelper {
 
     public static void saveResult(Object data, String name) {
         try {
-            FileWriter fstream = new FileWriter(resources + "ex_1out/out_" + name + "_" + System.currentTimeMillis() + ".txt");
+            FileWriter fstream = new FileWriter(RESOURCES + "ex_1out/out_" + name + "_" + System.currentTimeMillis() + ".txt");
             BufferedWriter out = new BufferedWriter(fstream);
             out.write(data.toString());
             out.close();
             log.debug("Zapis pliku zakończony powodzeniem");
+        } catch (IOException ex) {
+            log.warn("B\u0142\u0105d wczytywania pliku - IOException! ");
+            log.warn("B\u0142\u0105d wczytywania pliku! ", ex);
         } catch (Exception ex) {
             log.warn("B\u0142\u0105d zapisu pliku - Exception! ");
             log.warn("B\u0142\u0105d zapisu pliku! ", ex);

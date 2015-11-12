@@ -20,6 +20,30 @@ public class Cat {
         System.out.println("I'm a senior cat, now people called me :" + cat.getName());
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public Cat() {
     }
 
