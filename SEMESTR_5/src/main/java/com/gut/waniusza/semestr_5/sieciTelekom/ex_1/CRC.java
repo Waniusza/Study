@@ -10,32 +10,29 @@ public class CRC {
 
     public static String countCRCForData(byte[] byteData) {
 
-        String biteData = "";
+        String binaryData = "";
 
+        log.debug("CRC  => " + byteData.length);
         for (int i = 0; i < byteData.length; i++) {
-            biteData = biteData.concat(Integer.toBinaryString(byteData[i]));
-
-//            moduloResult = (moduloResult + countPairForBit(binaryString)) % Config.MODULO_MAX;
+            binaryData = binaryData.concat(Integer.toBinaryString(byteData[i]));
         }
-        log.debug(biteData);
-        return getCRC(biteData);
+        log.debug("CRC  => DONE1");
+        return getCRC(binaryData);
     }
 
     private static String getCRC(String binaryString) {
         String result = "";
         byte[] bytes = binaryString.getBytes();
         for (int i = 0; i < bytes.length - Config.CRC.length; i++) {
-            if (bytes[i] == 1) {
+            if (bytes[i] == '1') {
                 for (int j = 0; j < Config.CRC.length; j++) {
-                    bytes[i + j] = (byte) ((bytes[i + j] + Config.CRC[j]) % 2);
+                    bytes[i + j] = (byte) (((bytes[i + j] + Config.CRC[j] - 48) % 2) + 48);
                 }
             }
-            for (int z = 0; z < bytes.length; z++) {
-                System.out.print(bytes[z]);
-            }
-            System.out.println("");
         }
 
+        result = new String(bytes).substring(bytes.length - Config.CRC.length - 1);
+        log.debug("CRC  => DONE2");
         return result;
     }
 

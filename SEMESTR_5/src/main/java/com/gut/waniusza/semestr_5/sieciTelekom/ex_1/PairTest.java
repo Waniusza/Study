@@ -11,12 +11,14 @@ public class PairTest {
     static final byte[] biteData = FileHelper.getFileWithUtil(Runner.DATA_SRC);
     static final Boolean correctResult = Pair.countPairForData(biteData);
     private int fails;
-    
+    private static int countFails = 0;
+    private static int count = 0;
     public void runTest() {
         byte[] forcedData = forceWrongs();
         boolean isResultCorrect = correctResult.equals(Pair.countPairForData(forcedData));
-        log.debug("=========== wprowadzono zakłóceń: " + fails);
-        log.debug("=========== metoda sądzi że wynik jest " + (isResultCorrect ? " OK " : " WRONG"));
+        if (fails > 0 && isResultCorrect) {
+            log.warn("=========== metoda sądzi że wynik jest " + (isResultCorrect ? " OK " : " WRONG") + " mimo " + fails + " błędów");
+        }
     }
 
     private byte[] forceWrongs() {
@@ -26,10 +28,20 @@ public class PairTest {
 //            log.debug(chance + " :: " + rand);
             if (rand < Config.CNANCE_TO_WRONG) {
                 fails++;
-                result[i] = (byte) ((biteData[i] + 1) % 2);
-            }
+                result[i] = (byte) (((biteData[i]) % 2 ));
+            };
         }
         return result;
     }
 
+    public static int getCount() {
+        return count;
+    }
+
+    public static int getCountFails() {
+        return countFails;
+    }
+
+    
+ 
 }

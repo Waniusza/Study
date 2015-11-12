@@ -23,6 +23,7 @@ public class Pair {
         for (int j = 0; j < bytes.length; j++) {
             result += bytes[j] - 48;
         }
+        
         return result % 2 == 0;
     }
 
