@@ -1,6 +1,6 @@
-package com.gut.waniusza.semestr_5.sieciTelekom.ex_1;
+package com.gut.waniusza.semestr_5.sieciTelekom.ex_1.algorithm;
 
-import com.gut.waniusza.semestr_5.sieciTelekom.helper.Config;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.Config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -5,6 +5,12 @@
  */
 package com.gut.waniusza.semestr_5.sieciTelekom.ex_1;
 
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.algorithm.Modulo;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.algorithm.Pair;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.algorithm.CRC;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.test.CRCTest;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.test.PairTest;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.test.ModuloTest;
 import com.gut.waniusza.semestr_5.sieciTelekom.helper.FileHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

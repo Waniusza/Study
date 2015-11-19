@@ -1,23 +1,27 @@
-package com.gut.waniusza.semestr_5.sieciTelekom.ex_1;
+package com.gut.waniusza.semestr_5.sieciTelekom.ex_1.test;
 
-import com.gut.waniusza.semestr_5.sieciTelekom.helper.Config;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.Config;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.algorithm.Modulo;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.Runner;
 import com.gut.waniusza.semestr_5.sieciTelekom.helper.FileHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class PairTest {
+public class CRCTest {
 
-    private static final Logger log = LogManager.getLogger(PairTest.class);
+    private static final Logger log = LogManager.getLogger(CRCTest.class);
     static final byte[] biteData = FileHelper.getFileWithUtil(Runner.DATA_SRC);
-    static final Boolean correctResult = Pair.countPairForData(biteData);
-    private int fails;
+    static final int correctResult = Modulo.countModuloForData(biteData);
+    private int fails = 0;
     private static int countFails = 0;
     private static int count = 0;
+
     public void runTest() {
         byte[] forcedData = forceWrongs();
-        boolean isResultCorrect = correctResult.equals(Pair.countPairForData(forcedData));
+        int forcedResult = Modulo.countModuloForData(forcedData);
+        boolean isResultCorrect = correctResult == forcedResult;
         if (fails > 0 && isResultCorrect) {
-            log.warn("=========== metoda sądzi że wynik jest " + (isResultCorrect ? " OK " : " WRONG") + " mimo " + fails + " błędów");
+            log.warn("=========== metoda sądzi że wynik jest " + (isResultCorrect ? " OK " : " WRONG") + " mimo " + fails + " zakłóceń");
         }
     }
 
@@ -28,8 +32,8 @@ public class PairTest {
 //            log.debug(chance + " :: " + rand);
             if (rand < Config.CNANCE_TO_WRONG) {
                 fails++;
-                result[i] = (byte) (((biteData[i]) % 2 ));
-            };
+                result[i] = (byte) ((biteData[i] + 49) % 2 + 48);
+            }
         }
         return result;
     }
@@ -41,7 +45,4 @@ public class PairTest {
     public static int getCountFails() {
         return countFails;
     }
-
-    
- 
 }

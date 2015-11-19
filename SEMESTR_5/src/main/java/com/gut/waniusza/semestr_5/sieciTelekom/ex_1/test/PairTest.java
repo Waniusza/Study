@@ -1,31 +1,23 @@
-package com.gut.waniusza.semestr_5.sieciTelekom.ex_1;
+package com.gut.waniusza.semestr_5.sieciTelekom.ex_1.test;
 
-import com.gut.waniusza.semestr_5.sieciTelekom.helper.Config;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.Config;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.algorithm.Pair;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.Runner;
 import com.gut.waniusza.semestr_5.sieciTelekom.helper.FileHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ModuloTest {
+public class PairTest {
 
-    private static final Logger log = LogManager.getLogger(ModuloTest.class);
+    private static final Logger log = LogManager.getLogger(PairTest.class);
     static final byte[] biteData = FileHelper.getFileWithUtil(Runner.DATA_SRC);
-    static final int correctResult = Modulo.countModuloForData(biteData);
-    private int fails = 0;
+    static final Boolean correctResult = Pair.countPairForData(biteData);
+    private int fails;
     private static int countFails = 0;
     private static int count = 0;
-
     public void runTest() {
         byte[] forcedData = forceWrongs();
-        int forcedResult = Modulo.countModuloForData(forcedData);
-        boolean isResultCorrect = correctResult == forcedResult;
-//        if (fails > 0) {
-//            countFails++;
-//        }
-//        if (isResultCorrect) {
-//            count++;
-//        }
-//        log.debug("=========== wprowadzono zakłóceń: " + fails);
-//        log.debug("=========== metoda sądzi że wynik jest " + (isResultCorrect ? " OK " : " WRONG"));
+        boolean isResultCorrect = correctResult.equals(Pair.countPairForData(forcedData));
         if (fails > 0 && isResultCorrect) {
             log.warn("=========== metoda sądzi że wynik jest " + (isResultCorrect ? " OK " : " WRONG") + " mimo " + fails + " błędów");
         }
@@ -38,8 +30,8 @@ public class ModuloTest {
 //            log.debug(chance + " :: " + rand);
             if (rand < Config.CNANCE_TO_WRONG) {
                 fails++;
-                result[i] = (byte) (((biteData[i] + 49) % 2) + 48);
-            }
+                result[i] = (byte) (((biteData[i]) % 2 ));
+            };
         }
         return result;
     }
@@ -52,4 +44,6 @@ public class ModuloTest {
         return countFails;
     }
 
+    
+ 
 }

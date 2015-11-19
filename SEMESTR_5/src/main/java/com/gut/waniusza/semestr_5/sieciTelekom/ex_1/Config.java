@@ -1,4 +1,4 @@
-package com.gut.waniusza.semestr_5.sieciTelekom.helper;
+package com.gut.waniusza.semestr_5.sieciTelekom.ex_1;
 
 /**
  *

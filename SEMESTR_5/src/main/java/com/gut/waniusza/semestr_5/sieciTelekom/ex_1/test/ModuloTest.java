@@ -1,13 +1,15 @@
-package com.gut.waniusza.semestr_5.sieciTelekom.ex_1;
+package com.gut.waniusza.semestr_5.sieciTelekom.ex_1.test;
 
-import com.gut.waniusza.semestr_5.sieciTelekom.helper.Config;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.Config;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.algorithm.Modulo;
+import com.gut.waniusza.semestr_5.sieciTelekom.ex_1.Runner;
 import com.gut.waniusza.semestr_5.sieciTelekom.helper.FileHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class CRCTest {
+public class ModuloTest {
 
-    private static final Logger log = LogManager.getLogger(CRCTest.class);
+    private static final Logger log = LogManager.getLogger(ModuloTest.class);
     static final byte[] biteData = FileHelper.getFileWithUtil(Runner.DATA_SRC);
     static final int correctResult = Modulo.countModuloForData(biteData);
     private int fails = 0;
@@ -18,8 +20,16 @@ public class CRCTest {
         byte[] forcedData = forceWrongs();
         int forcedResult = Modulo.countModuloForData(forcedData);
         boolean isResultCorrect = correctResult == forcedResult;
+//        if (fails > 0) {
+//            countFails++;
+//        }
+//        if (isResultCorrect) {
+//            count++;
+//        }
+//        log.debug("=========== wprowadzono zakłóceń: " + fails);
+//        log.debug("=========== metoda sądzi że wynik jest " + (isResultCorrect ? " OK " : " WRONG"));
         if (fails > 0 && isResultCorrect) {
-            log.warn("=========== metoda sądzi że wynik jest " + (isResultCorrect ? " OK " : " WRONG") + " mimo " + fails + " zakłóceń");
+            log.warn("=========== metoda sądzi że wynik jest " + (isResultCorrect ? " OK " : " WRONG") + " mimo " + fails + " błędów");
         }
     }
 
@@ -30,7 +40,7 @@ public class CRCTest {
 //            log.debug(chance + " :: " + rand);
             if (rand < Config.CNANCE_TO_WRONG) {
                 fails++;
-                result[i] = (byte) ((biteData[i] + 49) % 2 + 48);
+                result[i] = (byte) (((biteData[i] + 49) % 2) + 48);
             }
         }
         return result;
@@ -43,4 +53,5 @@ public class CRCTest {
     public static int getCountFails() {
         return countFails;
     }
+
 }
