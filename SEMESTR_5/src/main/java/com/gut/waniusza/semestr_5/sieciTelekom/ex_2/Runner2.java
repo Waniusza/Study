@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,7 +33,7 @@ public class Runner2 {
         List<Pack> packs = new ArrayList<>();
         Pack tmpPack;
         int packNumber = 0;
-        while ( packNumber != packagesCount ) {
+        while (packNumber != packagesCount) {
             bis.read(dataToPack, 0, Config.MAX_PACKAGES_SIZE);
             tmpPack = new Pack(packNumber++, dataToPack, packagesCount);
             packs.add(tmpPack);
@@ -55,6 +56,20 @@ public class Runner2 {
         tmpPack = new Pack(packNumber++, lastBytes, packagesCount, lastBytes.length);
         log.debug(tmpPack);
         packs.add(tmpPack);
+
+        packs.sort(new PackUnComparator());
+        Iterator<Pack> iterator = packs.iterator();
+        while (iterator.hasNext()) {
+            Pack next = iterator.next();
+            log.debug( "desorted -> " + next);
+        }
+
+        packs.sort(new PackComparator());
+        Iterator<Pack> iterator2 = packs.iterator();
+        while (iterator2.hasNext()) {
+            Pack next = iterator2.next();
+            log.debug( "sorted -> " +next);
+        }
 
     }
 }

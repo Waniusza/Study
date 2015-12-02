@@ -36,14 +36,23 @@ public class Pack {
     public String toString() {
         String result = "";
         result += "numer paczki ";
-        result += (BinaryHelper.unsignedToBytes(paczka[2]) * 255 + BinaryHelper.unsignedToBytes(paczka[3])) + " :: ";
+        result += getPackNumber() + " :: ";
         result += "lacznie paczek: ";
         result += (BinaryHelper.unsignedToBytes(paczka[0]) * 255 + BinaryHelper.unsignedToBytes(paczka[1])) + " :: ";
         result += " dane paczki:  ";
-        for (int i = 0; i < paczka.length - 4; i++) {
-            result += BinaryHelper.toBinary(paczka[i + 4]);
-        }
+        result += BinaryHelper.toBinary(getData());
         return result;
+    }
+
+    public byte[] getData() {
+        byte[] data = new byte[paczka.length - 4];
+        for (int i = 0; i < paczka.length - 4; i++) {
+            data[i] = paczka[i + 4];
+        }
+        return data;
+    }
+     public int getPackNumber() {
+        return BinaryHelper.unsignedToBytes(paczka[2]) * 255 + BinaryHelper.unsignedToBytes(paczka[3]);
     }
 
 }
