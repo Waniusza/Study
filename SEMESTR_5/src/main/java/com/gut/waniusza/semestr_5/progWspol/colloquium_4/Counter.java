@@ -12,6 +12,7 @@ public class Counter extends ReentrantLock {
         count++;
     }
     public int getCount() {
+        
         return count;
     }
 }
