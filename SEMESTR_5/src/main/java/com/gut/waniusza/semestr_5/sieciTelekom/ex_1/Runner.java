@@ -18,13 +18,13 @@ import org.apache.logging.log4j.Logger;
 /**
  *
  * @author janusz BARTOSZ REICHEL REICHEL@mif.pg.gda.pl GB 409
- * http://dbserver.mif.pg.gda.pl/st/l2.pdf 
+ * http://dbserver.mif.pg.gda.pl/st/l1.pdf 
 */
 public class Runner {
 
     private static final Logger log = LogManager.getLogger(Runner.class);
 
-    public static String DATA_SRC = "in.jpg";
+    public static String DATA_SRC = "sieci/in.jpg";
     public static final Boolean RUN_PAIR = true;
     public static final Boolean TEST_PAIR = true;
     public static final Boolean RUN_MODULO = true;

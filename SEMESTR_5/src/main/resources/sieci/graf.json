@@ -1,0 +1,33 @@
+[{
+  "vertxFrom" : 1,
+  "vertxTo" : 2,
+  "lengthWeigth": 1     
+},{
+  "vertxFrom" : 2,
+  "vertxTo" : 5,
+  "lengthWeigth": 5     
+},{
+  "vertxFrom" : 1,
+  "vertxTo" : 5,
+  "lengthWeigth": 4     
+},{
+  "vertxFrom" : 2,
+  "vertxTo" : 4,
+  "lengthWeigth": 4     
+},{
+  "vertxFrom" : 1,
+  "vertxTo" : 4,
+  "lengthWeigth": 2     
+},{
+  "vertxFrom" : 1,
+  "vertxTo" : 3,
+  "lengthWeigth": 2     
+},{
+  "vertxFrom" : 3,
+  "vertxTo" : 4,
+  "lengthWeigth": 3     
+},{
+  "vertxFrom" : 4,
+  "vertxTo" : 5,
+  "lengthWeigth": 6     
+}]

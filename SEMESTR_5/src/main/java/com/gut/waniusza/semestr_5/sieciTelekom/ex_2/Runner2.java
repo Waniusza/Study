@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class Runner2 {
 
-    public static String DATA_SRC = "in.jpg";
+    public static String DATA_SRC = "sieci/in.jpg";
 
     private static final Logger log = LogManager.getLogger(Runner2.class);
 
