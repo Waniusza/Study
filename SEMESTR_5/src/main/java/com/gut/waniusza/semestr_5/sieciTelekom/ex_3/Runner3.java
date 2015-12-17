@@ -3,8 +3,12 @@ package com.gut.waniusza.semestr_5.sieciTelekom.ex_3;
 import com.gut.waniusza.semestr_5.sieciTelekom.helper.FileHelper;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
@@ -38,7 +42,7 @@ public class Runner3 {
                     return ((JsonObject) a).getInteger("lengthWeigth") - ((JsonObject) b).getInteger("lengthWeigth");
                 })
                 .collect(Collectors.toList());
-        
+
         List<Integer> vertxCollection = graphArray
                 .stream()
                 .flatMap(graph -> {
@@ -49,9 +53,28 @@ public class Runner3 {
                 .distinct()
                 .collect(Collectors.toList());
         JsonArray sortedGraphs = new JsonArray(sortedGraphsList);
-        log.debug("Wydzielone wierzchołki -> " + vertxCollection);   
-        log.debug("Posortowaem grafy -> " + sortedGraphs.encodePrettily());   
-        
+
+        Map<Integer, Set> connectedVertexs = new HashMap<>();
+        vertxCollection.forEach(vertxNr -> {
+            connectedVertexs.put(vertxNr, new HashSet());
+        });
+
+        sortedGraphs.forEach(graph -> {
+            JsonObject g = (JsonObject) graph;
+            Integer v1 = g.getInteger("vertxFrom");
+            Integer v2 = g.getInteger("vertxTo");
+            
+            Set V1Array = connectedVertexs.get(v1);
+            Set V2Array = connectedVertexs.get(v2);
+            Set newV1Array = V1Array.addAll(V2Array);
+            Set newV2Array = V2Array.addAll(V1Array);
+            connectedVertexs.put(v1, newV1Array);
+            connectedVertexs.put(v2, newV2Array);
+        });
+        log.debug("Wydzielone krawędzie -> " + vertxCollection);
+        log.debug("Posortowalem krawędzie -> " + sortedGraphs.encodePrettily());
+        log.debug("Połączone krawędzie -> " + connectedVertexs);
+
     }
 
 }
