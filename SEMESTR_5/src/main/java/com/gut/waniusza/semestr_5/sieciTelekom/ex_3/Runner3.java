@@ -3,12 +3,9 @@ package com.gut.waniusza.semestr_5.sieciTelekom.ex_3;
 import com.gut.waniusza.semestr_5.sieciTelekom.helper.FileHelper;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
@@ -30,51 +27,94 @@ public class Runner3 {
      * @param args
      */
     public static void main(String[] args) {
-        log.debug(" init ");
+        log.debug(" ========================================= PRZYGOTOWUJĘ KRAWĘDZIE ");
         byte[] biteData = FileHelper.getFileWithUtil(DATA_SRC);
 
-        JsonArray graphArray = new JsonArray(new String(biteData));
-        log.debug("Załadowałem grafy -> " + graphArray.encodePrettily());
+        JsonArray edgeArray = new JsonArray(new String(biteData));
+        log.debug("Załadowałem krawędzie -> " + edgeArray.encodePrettily());
 
-        List<Object> sortedGraphsList = graphArray
+        List<JsonObject> sortedEdgeList = edgeArray
                 .stream()
-                .sorted((a, b) -> {
-                    return ((JsonObject) a).getInteger("lengthWeigth") - ((JsonObject) b).getInteger("lengthWeigth");
-                })
+                .map(r -> (JsonObject) r)
+                .sorted(new GraphComparator())
                 .collect(Collectors.toList());
 
-        List<Integer> vertxCollection = graphArray
+        List<Integer> vertxCollection = edgeArray
                 .stream()
                 .flatMap(graph -> {
-                    int v1 = ((JsonObject) graph).getInteger("vertxFrom");
-                    int v2 = ((JsonObject) graph).getInteger("vertxTo");
+                    int v1 = ((JsonObject) graph).getInteger(GraphConst.EDGE_VERTX_FROM);
+                    int v2 = ((JsonObject) graph).getInteger(GraphConst.EDGE_VERTX_TO);
                     return Stream.of(v1, v2);
                 })
                 .distinct()
                 .collect(Collectors.toList());
-        JsonArray sortedGraphs = new JsonArray(sortedGraphsList);
 
-        Map<Integer, Set> connectedVertexs = new HashMap<>();
-        vertxCollection.forEach(vertxNr -> {
-            connectedVertexs.put(vertxNr, new HashSet());
-        });
+        log.debug("Wydzielone wierzchołki -> " + vertxCollection);
+        log.debug("Wydzielone i posortowane krawędzie -> " + sortedEdgeList);
 
-        sortedGraphs.forEach(graph -> {
-            JsonObject g = (JsonObject) graph;
-            Integer v1 = g.getInteger("vertxFrom");
-            Integer v2 = g.getInteger("vertxTo");
+        List<JsonObject> trees = new ArrayList<>();
+        Integer treeIndex;
+        Iterator<JsonObject> edgeIterator = sortedEdgeList.iterator();
+        
+        log.debug(" ========================================= TWORZĘ CZĘŚCIOWE GRAFY ROZPINAJĄCE, DOPROWADZAJĄCE DO WYNIKU ");
+
+        while ((treeIndex = GraphHelper.resultFound(trees, vertxCollection.size())) == null) {
+            JsonObject edge = edgeIterator.next();
+
+            Integer toTreeIndex=  GraphHelper.treeContainsVertxIndex(trees, edge.getInteger(GraphConst.EDGE_VERTX_TO));
+            Integer fromTreeIndex = GraphHelper.treeContainsVertxIndex(trees, edge.getInteger(GraphConst.EDGE_VERTX_FROM));
+
+            log.debug("Indeksy częsciowych grafów rozpinających : " + toTreeIndex + " :: " + fromTreeIndex + " :: ");
             
-            Set V1Array = connectedVertexs.get(v1);
-            Set V2Array = connectedVertexs.get(v2);
-            Set newV1Array = V1Array.addAll(V2Array);
-            Set newV2Array = V2Array.addAll(V1Array);
-            connectedVertexs.put(v1, newV1Array);
-            connectedVertexs.put(v2, newV2Array);
-        });
-        log.debug("Wydzielone krawędzie -> " + vertxCollection);
-        log.debug("Posortowalem krawędzie -> " + sortedGraphs.encodePrettily());
-        log.debug("Połączone krawędzie -> " + connectedVertexs);
+            if (toTreeIndex != null && fromTreeIndex != null && toTreeIndex.equals(fromTreeIndex)) {
+                log.debug("Oba wierzchołki należą to dego samego częściowego grafu rozpinającego.");
+                log.debug("Nic nie rób");
+            } else if (toTreeIndex != null && fromTreeIndex != null) {
+                log.debug("Początkowy wierzchołkek należy do pewnego częściowego grafu rozpinającego, końcowy nie przynależy do żadnego ");
+                log.debug("Dołącz krawędź do grafu posiadającego początkowy wierzchołek");
+                JsonObject treeTo = trees.get(toTreeIndex);
+                JsonObject treeFrom = trees.get(fromTreeIndex);
 
+                GraphHelper.connectTrees(treeTo, treeFrom);
+                trees.remove(fromTreeIndex.intValue());
+                trees.set(toTreeIndex, treeTo);
+            } else if (toTreeIndex != null && fromTreeIndex == null) {
+                log.debug("Końcowy wierzchołkek należy do pewnego częściowego grafu rozpinającego, początkowy nie przynależy do żadnego ");
+                log.debug("Dołącz krawędź do grafu posiadającego końcowy wierzchołek");
+                JsonObject treeTo = trees.get(toTreeIndex);
+                JsonObject newTreeTo = GraphHelper.addEdgeToTree(treeTo, edge);
+                trees.set(toTreeIndex, newTreeTo);
+            } else if (toTreeIndex == null && fromTreeIndex != null) {
+                log.debug("Oba wierzchołki należą do różnych częściowych grafów rozpinających");
+                log.debug("Połącz grafy");
+            
+                JsonObject treeFrom = trees.get(fromTreeIndex);
+                JsonObject newTreeFrom = GraphHelper.addEdgeToTree(treeFrom, edge);
+                trees.set(fromTreeIndex, newTreeFrom);
+            } else {
+                log.debug("Żaden wierzchołków nie należy do istniejącego częściowego grafu rozpinającego");
+                log.debug("Stwórz nowy graf");
+           
+                JsonObject newTree = new JsonObject()
+                        .put(GraphConst.RESULT_VERTXS, new JsonArray()
+                                .add(edge.getInteger(GraphConst.EDGE_VERTX_TO))
+                                .add(edge.getInteger(GraphConst.EDGE_VERTX_FROM)))
+                        .put(GraphConst.RESULT_EDGES, new JsonArray()
+                                .add(edge));
+
+                trees.add(newTree);
+            }
+            log.debug("Po obsłużeniu krawędzi : " + edge.encodePrettily());
+            log.debug("Mam częściowe grafy rozpinające  : ");
+            trees.forEach(tree -> {
+                log.debug(tree);
+            });
+        };
+        
+        
+        log.debug(" ========================================= OTRZYMAŁEM OSTATECZNY GRAF ROZINAJĄCY, ZAWIERAJĄCY WSZYSTKIE WIERZCHOŁKI ");
+
+        log.debug("Ostateczny graf rozpinający: " + trees.get(treeIndex).getJsonArray(GraphConst.RESULT_EDGES).encodePrettily());
+        log.debug("Ostateczną długość połączeń: " + GraphHelper.countSummaryLength(trees.get(treeIndex)));
     }
-
 }
