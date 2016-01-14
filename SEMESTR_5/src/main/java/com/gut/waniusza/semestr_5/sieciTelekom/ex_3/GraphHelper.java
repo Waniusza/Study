@@ -10,7 +10,7 @@ import java.util.List;
  * @author student
  */
 public class GraphHelper {
-    
+
     static Integer treeContainsVertxIndex(List<JsonObject> results, int vertxNr) {
         Integer res = null;
         int iteration = 0;
@@ -47,6 +47,12 @@ public class GraphHelper {
         return result1;
     }
 
+    static JsonObject initTree() {
+        return new JsonObject()
+                .put(GraphConst.RESULT_VERTXS, new JsonArray())
+                .put(GraphConst.RESULT_EDGES, new JsonArray());
+    }
+
     static JsonObject addEdgeToTree(JsonObject result, JsonObject edge) {
         Integer v1 = edge.getInteger(GraphConst.EDGE_VERTX_FROM);
         Integer v2 = edge.getInteger(GraphConst.EDGE_VERTX_TO);
@@ -61,20 +67,18 @@ public class GraphHelper {
         result.put(GraphConst.RESULT_EDGES, result.getJsonArray(GraphConst.RESULT_EDGES).add(edge));
         return result;
     }
-    
-    
 
     static Integer countSummaryLength(JsonObject resultTree) {
         Integer result = 0;
         JsonArray edges = resultTree.getJsonArray(GraphConst.RESULT_EDGES);
         Iterator<Object> iterator = edges.iterator();
-        
+
         while (iterator.hasNext()) {
-             result += ((JsonObject)iterator.next()).getInteger(GraphConst.EDGE_LENGTH);
+            result += ((JsonObject) iterator.next()).getInteger(GraphConst.EDGE_LENGTH);
         }
-        
+
         return result;
-        
+
     }
- 
+
 }
