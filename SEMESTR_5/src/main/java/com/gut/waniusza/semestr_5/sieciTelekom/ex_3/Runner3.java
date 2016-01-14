@@ -50,18 +50,22 @@ public class Runner3 {
                 .distinct()
                 .collect(Collectors.toList());
 
-        Map<String, List<JsonObject>> mappedVertxs = edgeArray
+        List<JsonObject> mappedVertxs = edgeArray
                 .stream()
                 .flatMap(graph -> {
                     JsonObject j1 = new JsonObject()
-                    .put("vrtx", ((JsonObject) graph).getInteger(GraphConst.EDGE_VERTX_FROM).toString())
-                    .put("graph", graph);
+                            .put("vrtx", ((JsonObject) graph).getInteger(GraphConst.EDGE_VERTX_FROM).toString())
+                            .put("graph", graph);
                     JsonObject j2 = new JsonObject()
-                    .put("vrtx", ((JsonObject) graph).getInteger(GraphConst.EDGE_VERTX_TO).toString())
-                    .put("graph", graph);
-
+                            .put("vrtx", ((JsonObject) graph).getInteger(GraphConst.EDGE_VERTX_TO).toString())
+                            .put("graph", graph);
+                    
                     return Stream.of(j1, j2);
                 })
+                .collect(Collectors.toList());
+        
+        mappedVertxs.forEach();
+        
                 .collect(Collectors.groupingBy(tmp -> tmp.getString("vrtx"), Collectors.mapping(tmp -> tmp.getJsonObject("graph"), Collectors.toList())));
 
         log.debug("Wydzielone wierzchołki -> " + vertxCollection);
@@ -73,7 +77,6 @@ public class Runner3 {
 //        JsonObject wynik = kruskalaAlgorithm.count();
 //        log.debug("Ostateczny graf rozpinający: " + wynik.getJsonArray(GraphConst.RESULT_EDGES).encodePrettily());
 //        log.debug("Ostateczną długość połączeń: " + GraphHelper.countSummaryLength(wynik));
-
         Prima primaAlgorithm = new Prima(mappedVertxs);
         JsonObject wynik = primaAlgorithm.count();
         log.debug("Ostateczny graf rozpinający: " + wynik.getJsonArray(GraphConst.RESULT_EDGES).encodePrettily());
